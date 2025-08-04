@@ -1,0 +1,107 @@
+create database Banyias;
+use Banyias;
+
+create table Customer (cid int , 
+						cname varchar(20) , 
+                         email char(30), 
+                          balance int , 
+                          fax char(30), 
+                          credit_limit int ,
+                          last_paid_date date ,
+                          last_order_date date ,
+                          last_visit_date date ,
+                          cactive boolean ,
+                          country varchar(20) Not Null,
+                          city varchar(20) Not Null, 
+                          street_number int Not Null, 
+                          building_number int Not Null,
+                          primary key(cid),
+                          foreign key(ountry,city,street_number, building_number) references Address(country,city,street_number, building_number));
+                          
+create table Phone_Number(cid int,
+                         phone int, 
+                         primary key(cid,phone) ,
+                         foreign key(cid) references Customer(cid));
+                         
+create table Address ( country varchar(20), 
+                       city varchar(20),
+					   street_number int, 
+                       building_number int, 
+                       primary key(country,city,street_number, building_number));
+                       
+create table Employee(eid int 
+                       ,Department_id int Not Null,
+                       Birth_date date,
+                       Job_title varchar(20), 
+                       Salary double, 
+                       Debt double, 
+                       Vacation_days int, 
+                       Hire_date date, 
+                       Target double , 
+                       eactive boolean,
+                       manager_id int Not Null,
+                       primary key(eid),
+                       foreign key (Department_id) references Departement (did));
+                       
+create table Customer_Employee_Work(cid int, 
+									eid int,
+                                    primary key (cid, eid),
+                                    foreign key (cid) references Customer(cid), 
+                                    foreign key (eid) references  Employee(eid));
+                                    
+create table Contact( eid int,
+                       phone int,
+                       primary key(eid, phone),
+                       foreign key (eid) references Employee(eid));
+                       
+create table Department( did int,
+                         Location varchar(20),
+                         dname varchar(20),
+                         primary key (did));
+                         
+create table Banyias_Order (oid int, 
+                               cid int , 
+                               eid int , 
+                               Total_Price double, 
+                               Tax double, 
+                               Order_Discount double, 
+                               Is_returned boolean,
+                               Ware_house char(20),
+                                primary key(oid),
+                                foreign key (cid) references Cusomer(cid),
+                                foreign key (eid) references Employee(eid));
+                                
+create table Order_Details(oid int, 
+                       quantity double, 
+					    Product_discount_percent double, 
+						Product_discount_amount double, 
+                        Created_at date, 
+                        primary key(oid),
+                        foreign key (oid) references Banyias_Order(oid));
+                        
+create table Prodcut (pid int, 
+                      Category_id int Not Null,
+                      Barcode char(20),
+                      pname char(20), 
+                      Price double, 
+                      Weight double, 
+                      pactive boolean, 
+                       Manufacturing_Date date,
+                       Expired_Date date, 
+                       primary key(pid),
+                       foreign key(Category_id) references Category(Category_id));
+                       
+create table Order_Have_Product( pid int,
+                                oid int,
+                                primary key(pid, oid), 
+                                foreign key (pid) references Product(pid),
+                                foreign key(oid) references Banyias_Order(oid));
+                                
+create table Category(Category_id int, 
+                       Category_name char(20), 
+                       Category_active boolean , 
+                       Main_Category_id int Not Null,
+                       primary key(Category_id));
+                       
+show tables;
+
